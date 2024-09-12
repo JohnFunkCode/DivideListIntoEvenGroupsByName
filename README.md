@@ -1,4 +1,5 @@
-#DivideNamesIntoEvenGroups
+# DivideNamesIntoEvenGroups
+
 This project divides a list of names into even groups based on the first letter of the last name.
 
 In the first commit we'll start by plotting the test data chatGPT generate for us to make sure it's diverse enough.
