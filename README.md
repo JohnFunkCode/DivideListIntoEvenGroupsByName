@@ -1,4 +1,4 @@
-# DivideNamesIntoEvenGroups
+ ['''''''''# DivideNamesIntoEvenGroups
 
 This project divides a list of names into even groups based on the first letter of the last name.
 
@@ -9,8 +9,8 @@ The prompt provided to ChatGPT to generate the data file is as follows:
 ``````
 Generate a CSV file with 1000 random name entries that reflect the diverse population of Denver, Colorado. Each entry should include a first name, last name, gender, and age. The following conditions must be met:
 
-	1.	The first names should include a mix of common male and female names, with approximately 20 names for each gender. Male first names may include: John, Carlos, Mohammed, Liam, etc. Female first names may include: Mary, Maria, Sophia, Emma, etc.
-	2.	There should be at least 100 different last names, reflecting a diverse population. These last names should include Anglo, Hispanic, African American, and Asian names, such as: Smith, Garcia, Nguyen, Kim, Ali, etc.
+	1.	The first names should include a mix of common male and female names, with approximately 100 different names for each gender.  The names should reflect a diverse population including Anglo, Hispanic, African American and Asian names.
+	2.	There should be at least 500 different last names, reflecting a diverse population. These last names should include Anglo, Hispanic, African American, and Asian names, such as: Smith, Garcia, Nguyen, Kim, Ali, etc.
 	3.	Gender should be randomly assigned as “Male” or “Female.”
 	4.	Each person should be assigned a random age between 4 and 65.
 	5.	The file should be named random_names_with_age_diverse_100.csv and contain the following columns: “First Name”, “Last Name”, “Gender”, and “Age”.
@@ -48,7 +48,7 @@ Generate a CSV file with 1000 random name entries that reflect the diverse popul
 
 2. Run the script:
     ```sh
-    python main.py
+    python assess_dataset.py
     ```
 
 3. The script will read the CSV file, process the data, and display a bar chart showing the distribution of the first letters of the last names.
