@@ -2,8 +2,12 @@
 
 This project divides a list of names into even groups based on the first letter of the last name.
 
-In the first commit we'll start by plotting the test data chatGPT generate for us to make sure it's diverse enough.
-We'll do that by visualizing the distribution of the first letters of the last names using a bar chart.
+The partitioning logic now uses a **bucket variance score** that represents how evenly distributed the partitions are,
+and a **spread score** that represents how wide the partitions are.  It optimized these two scores to pick the best 
+partitions for the data provided.
+
+The first commit start by plotting the test data chatGPT generate for us to make sure it's diverse enough.
+That is done by visualizing the distribution of the first letters of the last names using a bar chart.
 
 The prompt provided to ChatGPT to generate the data file is as follows:
 ``````
@@ -16,11 +20,6 @@ Generate a CSV file with 1000 random name entries that reflect the diverse popul
 	5.	The file should be named random_names_with_age_diverse_100.csv and contain the following columns: “First Name”, “Last Name”, “Gender”, and “Age”.
 ``````
 
-## Project Structure
-
-- `main.py`: The main script that reads the CSV file, processes the data, and generates the bar chart.
-- `random_names_with_age_diverse_100.csv`: The CSV file containing the data.
-- `logs/`: Directory where log files are stored.
 
 ## Requirements
 
@@ -28,19 +27,6 @@ Generate a CSV file with 1000 random name entries that reflect the diverse popul
 - pandas
 - numpy
 - matplotlib
-
-## Setup
-
-1. Clone the repository:
-    ```sh
-    git clone https://github.com/JohnFunkCode/random-names-with-age-diverse.git
-    cd random-names-with-age-diverse
-    ```
-
-2. Install the required packages:
-    ```sh
-    pip install pandas numpy matplotlib
-    ```
 
 ## Usage
 
