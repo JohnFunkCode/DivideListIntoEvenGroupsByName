@@ -1,8 +1,20 @@
+# done - record the scores in a collection in the class.
+# done - the winner is the one with the lowest score, and the lowest spread_score
+# done - calculate the number of buckets, and only test that number and that number +1 to account for the edge cases.
+# done - connect this back up to the test harness
+# tbd - test this all with a few of the edge cases we've cooked up
+# tbd - run tests with the big test data set
+# tbd - think about refactoring the return values to make it easier to call from the tournament code - probably return a list with the partition boundaries.
+# tbd - see if a recursive version is still understandable enough that you could debug it in a year.
+# tbd - clean up comments and logging for production use
+
 import logging
 import os
 import sys
 from datetime import datetime
 import math
+
+import pandas
 import pandas as pd
 
 class NamePartionioner:
@@ -15,52 +27,249 @@ class NamePartionioner:
     def __init__(self):
         '''setup instance variables'''
         super().__init__()
+        self.list_of_scores = []
+        self.logger = self.initialize_logger()
 
-    def get_partition_boundaries(self, the_data:pd.DataFrame, max_entries_per_partition:int) -> list:
-        print(the_data)
+    def split_into_two_partitions(self, max_entries_per_partition:int, the_data:pd.DataFrame) -> list:
+        '''split the data into two partitions'''
+        self.logger.info("split_into_two_partitions")
+        self.logger.info(the_data)
 
         # calculate the number of partitions
         number_of_partitions = math.ceil((len(the_data) / max_entries_per_partition))
-        print(f'number_of_partitions:', number_of_partitions)
+        self.logger.info(f'number_of_partitions:', number_of_partitions)
 
-        return [{'A','F'},{'G','L'},{'M','R'}]
-
-
-
-if __name__ == '__main__':
-    data = {
-        'first_name': ['John', 'Jane', 'Jim', 'Jenny', 'Jack'],
-        'last_name': ['Doe', 'Smith', 'Brown', 'Smith', 'Black']
-    }
-    df = pd.DataFrame(data)
-
-    # Add a column to the dataframe with the first letter of the 'Last Name' field
-    df['LastNameFirstLetter'] = df['last_name'].str[0]
-
-    goal = 2
-
-    i=0
-    for boundry1 in range(1,26):
-        # print(f'A-{chr(64+boundry1)}')
-        for boundry2 in range(boundry1+1,26):
-            # print(f'A-{chr(64 + boundry1)}, {chr(64 + boundry1 + 1)}-{chr(64 + boundry2)}, {chr(64 + boundry2+1)}-Z')
-            query_string1=f'LastNameFirstLetter >= "A" and LastNameFirstLetter <= "{chr(64 + boundry1)}"'
-            bucket1 = df.query(query_string1)
+        i=0
+        for boundry1 in range(1, 26):
+            # self.logger.info(f'A-{chr(64 + boundry1)}, {chr(64 + boundry1 + 1)}-{chr(64 + boundry2)}, {chr(64 + boundry2+1)}-Z')
+            query_string1 = f'LastNameFirstLetter >= "A" and LastNameFirstLetter <= "{chr(64 + boundry1)}"'
+            bucket1 = the_data.query(query_string1)
             sizeofbucket1 = len(bucket1)
 
-            query_string2=f'LastNameFirstLetter >= "{chr(64 + boundry1 + 1)}" and LastNameFirstLetter <= "{chr(64 + boundry2)}"'
-            bucket2 = df.query(query_string2)
+            query_string2 = f'LastNameFirstLetter >= "{chr(64 + boundry1 + 1)}" and LastNameFirstLetter <= "Z"'
+            bucket2 = the_data.query(query_string2)
             sizeofbucket2 = len(bucket2)
 
-            query_string3=f'LastNameFirstLetter >= "{chr(64 + boundry2 + 1)}" and LastNameFirstLetter <= "Z"'
-            bucket3 = df.query(query_string3)
-            sizeofbucket3 = len(bucket3)
+            bucket_variance_score = (max_entries_per_partition - sizeofbucket1) ** 2 + (
+                    max_entries_per_partition - sizeofbucket2) ** 2
 
-            score = (goal-sizeofbucket1)**2 + (goal-sizeofbucket2)**2 + (goal-sizeofbucket3)**2
+            spread_score = ((boundry1 - 0) ** 2 +
+                            (26 - boundry1) ** 2)
 
-            if(score==1):
-             print(f'A-{chr(64 + boundry1)}:{sizeofbucket1}, {chr(64 + boundry1 + 1)}-{chr(64 + boundry2)}:{sizeofbucket2}, {chr(64 + boundry2+1)}-Z:{sizeofbucket3} - score={score}')
+            # spread_score = ((boundry1 - ord('A')) ** 2 +
+            #           (ord('Z') - boundry1) ** 2)
 
-            i=i+1
-    print(i)
+            if(max_entries_per_partition < sizeofbucket1) or (max_entries_per_partition < sizeofbucket2):
+                bucket_variance_score = 65535
+
+            if (bucket_variance_score < 65535):
+                self.logger.info(f'A-{chr(64 + boundry1)}:{sizeofbucket1}:{boundry1-0}, '
+                      f'{chr(64 + boundry1 + 1)}-Z::{sizeofbucket2}:{26-boundry1} '
+                          f'- bucket_variance_score={bucket_variance_score} spread_score={spread_score}')
+                self.list_of_scores.append({'bucket_variance_score':bucket_variance_score,
+                                            'spread_score':spread_score,
+                                            'boundaries':(['A', chr(64 + boundry1)],
+                                                          [chr(64 + boundry1 + 1), 'Z'])})
+
+            i = i + 1
+        self.logger.info(f'evaluated {i} combinations')
+
+    def split_into_three_partitions(self, max_entries_per_partition:int, the_data:pd.DataFrame) -> list:
+        self.logger.info("split_into_three_partitions")
+        i = 0
+        for boundry1 in range(1, 26):
+            # self.logger.info(f'A-{chr(64+boundry1)}')
+            for boundry2 in range(boundry1 + 1, 26):
+                # self.logger.info(f'A-{chr(64 + boundry1)}, {chr(64 + boundry1 + 1)}-{chr(64 + boundry2)}, {chr(64 + boundry2+1)}-Z')
+                query_string1 = f'LastNameFirstLetter >= "A" and LastNameFirstLetter <= "{chr(64 + boundry1)}"'
+                bucket1 = the_data.query(query_string1)
+                sizeofbucket1 = len(bucket1)
+
+                query_string2 = f'LastNameFirstLetter >= "{chr(64 + boundry1 + 1)}" and LastNameFirstLetter <= "{chr(64 + boundry2)}"'
+                bucket2 = the_data.query(query_string2)
+                sizeofbucket2 = len(bucket2)
+
+                query_string3 = f'LastNameFirstLetter >= "{chr(64 + boundry2 + 1)}" and LastNameFirstLetter <= "Z"'
+                bucket3 = the_data.query(query_string3)
+                sizeofbucket3 = len(bucket3)
+
+                bucket_variance_score = (max_entries_per_partition - sizeofbucket1) ** 2 + (
+                        max_entries_per_partition - sizeofbucket2) ** 2 + (
+                                max_entries_per_partition - sizeofbucket3) ** 2
+
+                spread_score = ( (boundry1 - 0) ** 2 +
+                           (boundry2 - boundry1) ** 2 +
+                           (26 - boundry2) ** 2)
+
+                # spread_score = ( (boundry1 - ord('A')) ** 2 +
+                #            (boundry2 - boundry1) ** 2 +
+                #            (ord('Z') - boundry2) ** 2)
+
+                if (max_entries_per_partition < sizeofbucket1) or (max_entries_per_partition < sizeofbucket2) or (max_entries_per_partition < sizeofbucket3):
+                    bucket_variance_score = 65535
+
+                if (bucket_variance_score < 65535):
+                    self.logger.info(f'A-{chr(64 + boundry1)}:{sizeofbucket1}:{boundry1-0}, '
+                          f'{chr(64 + boundry1 + 1)}-{chr(64 + boundry2)}:{sizeofbucket2}:{boundry2-boundry1}, '
+                          f'{chr(64 + boundry2 + 1)}-Z:{sizeofbucket3}:{26-boundry2} '
+                          f'- bucket_variance_score={bucket_variance_score} spread_score={spread_score}')
+                    self.list_of_scores.append({'bucket_variance_score':bucket_variance_score,
+                                                'spread_score':spread_score,
+                                                'boundaries':(['A', chr(64 + boundry1)],
+                                                              [chr(64 + boundry1 + 1), chr(64 + boundry2)],
+                                                              [chr(64 + boundry2 + 1), 'Z'])})
+
+                i = i + 1
+        self.logger.info(f'evaluated {i} combinations')
+
+    def split_into_four_partitions(self, max_entries_per_partition:int, the_data:pd.DataFrame) -> list:
+        self.logger.info("split_into_four_partitions")
+        i = 0
+        for boundry1 in range(1, 26):
+            # self.logger.info(f'A-{chr(64+boundry1)}')
+            for boundry2 in range(boundry1 + 1, 26):
+                for boundry3 in range(boundry2 + 1, 26):
+                    # self.logger.info(f'A-{chr(64 + boundry1)}, {chr(64 + boundry1 + 1)}-{chr(64 + boundry2)}, {chr(64 + boundry2 + 1)}-{chr(64 + boundry3)}, {chr(64 + boundry3+1)}-Z')
+                    query_string1 = f'LastNameFirstLetter >= "A" and LastNameFirstLetter <= "{chr(64 + boundry1)}"'
+                    bucket1 = the_data.query(query_string1)
+                    sizeofbucket1 = len(bucket1)
+
+                    query_string2 = f'LastNameFirstLetter >= "{chr(64 + boundry1 + 1)}" and LastNameFirstLetter <= "{chr(64 + boundry2)}"'
+                    bucket2 = the_data.query(query_string2)
+                    sizeofbucket2 = len(bucket2)
+
+                    query_string3 = f'LastNameFirstLetter >= "{chr(64 + boundry2 + 1)}" and LastNameFirstLetter <= "{chr(64 + boundry3)}"'
+                    bucket3 = the_data.query(query_string3)
+                    sizeofbucket3 = len(bucket3)
+
+                    query_string4 = f'LastNameFirstLetter >= "{chr(64 + boundry3 + 1)}" and LastNameFirstLetter <= "Z"'
+                    bucket4 = the_data.query(query_string4)
+                    sizeofbucket4 = len(bucket4)
+
+
+                    bucket_variance_score = ((max_entries_per_partition - sizeofbucket1) ** 2 +
+                             (max_entries_per_partition - sizeofbucket2) ** 2 +
+                             (max_entries_per_partition - sizeofbucket3) ** 2)
+
+                    spread_score = ((boundry1 - 0) ** 2 +
+                                    (boundry2 - boundry1) ** 2 +
+                                    (boundry3 - boundry2) ** 2 +
+                                    (26 - boundry3) ** 2)
+
+                    # spread_score = ((boundry1 - ord('A')) ** 2 +
+                    #           (boundry2 - boundry1) ** 2 +
+                    #           (boundry3 - boundry2) ** 2 +
+                    #           (ord('Z') - boundry3) ** 2)
+
+
+                    if (max_entries_per_partition < sizeofbucket1) or (max_entries_per_partition < sizeofbucket2) or (max_entries_per_partition < sizeofbucket3) or (max_entries_per_partition < sizeofbucket4):
+                        bucket_variance_score = 65535
+
+                    if (sizeofbucket1 ==0) or (sizeofbucket2 ==0) or (sizeofbucket3 ==0) or (sizeofbucket4 ==0):
+                        bucket_variance_score = 65535
+
+                    if (bucket_variance_score < 65535):
+                        self.logger.info(f'A-{chr(64 + boundry1)}:{sizeofbucket1}:{boundry1-0}, '
+                              f'{chr(64 + boundry1 + 1)}-{chr(64 + boundry2)}:{sizeofbucket2}:{boundry2-boundry1}, '
+                              f'{chr(64 + boundry2 + 1)}-{chr(64 + boundry3)}:{sizeofbucket3}:{boundry3-boundry2}, '
+                              f'{chr(64 + boundry3 + 1)}-Z:{sizeofbucket4}:{26-boundry3} '
+                              f'- bucket_variance_score={bucket_variance_score} spread_score={spread_score}')
+                        self.list_of_scores.append({'bucket_variance_score':bucket_variance_score,'spread_score':spread_score, 'boundaries':(['A', chr(64 + boundry1)],
+                                                                                                 [chr(64 + boundry1 + 1), chr(64 + boundry2)],
+                                                                                                 [chr(64 + boundry2 + 1), boundry3],
+                                                                                                 [chr(64 + boundry3 + 1),'Z'])})
+
+                    i = i + 1
+        self.logger.info(f'evaluated {i} combinations')
+
+    # def get_partition_boundaries(self, the_data:pd.DataFrame, max_entries_per_partition:int) -> list:
+    #     self.logger.info(the_data)
+    #
+    #     # calculate the number of partitions
+    #     number_of_partitions = math.ceil((len(the_data) / max_entries_per_partition))
+    #     self.logger.info(f'number_of_partitions:', number_of_partitions)
+    #
+    #     return [{'A','F'},{'G','L'},{'M','R'}]
+    def get_optimum_partition_boundaries(self, the_data: pandas.DataFrame, max_entries_per_partition: int) -> list:
+        size_of_dataframe = len(the_data)
+        expected_partitions = math.ceil(size_of_dataframe / max_entries_per_partition)
+        self.logger.info(f'data size:{size_of_dataframe}, max people per partition: {max_entries_per_partition}, expected_partitions: {expected_partitions} or {expected_partitions + 1}')
+
+        # Add a column to the dataframe with the first letter of the 'Last Name' field
+        the_data['LastNameFirstLetter'] = the_data['last_name'].str[0]
+
+        match expected_partitions:
+            case 1:
+                return [['A','Z']]
+
+            case 2:
+                self.split_into_two_partitions(max_entries_per_partition, the_data)
+                self.split_into_two_partitions(max_entries_per_partition, the_data)
+                self.split_into_three_partitions(max_entries_per_partition, the_data)
+
+            case 3:
+                self.split_into_three_partitions(max_entries_per_partition, the_data)
+                self.split_into_four_partitions(max_entries_per_partition, the_data)
+
+        # self.split_into_two_partitions(max_entries_per_partition, the_data)
+        # self.split_into_three_partitions(max_entries_per_partition, the_data)
+        # self.split_into_four_partitions(max_entries_per_partition, the_data)
+
+
+        # # Find the index of the element with the lowest bucket_variance_score and highest spread_score
+        # min_bucket_variance_score_max_spread_score_index = min(
+        #     range(len(self.list_of_scores)),
+        #     key=lambda i: (self.list_of_scores[i]['bucket_variance_score'], -self.list_of_scores[i]['spread_score'])
+        # )
+
+        # Find the index of the element with the lowest bucket_variance_score and lowest spread_score
+        min_bucket_variance_score_min_spread_score_index = min(
+            range(len(self.list_of_scores)),
+            key=lambda i: (self.list_of_scores[i]['bucket_variance_score'], self.list_of_scores[i]['spread_score'])
+        )
+
+        self.logger.info(f'Index of the element with the lowest Score and lowest spread_score: {min_bucket_variance_score_min_spread_score_index}')
+        best = self.list_of_scores[min_bucket_variance_score_min_spread_score_index]
+
+        #
+        # self.logger.info(f'Index of the element with the lowest Score and highest spread_score: {min_bucket_variance_score_max_spread_score_index}')
+        # best = self.list_of_scores[min_bucket_variance_score_max_spread_score_index]
+        self.logger.info(best)
+        self.logger.info(best['boundaries'])
+        return best['boundaries']
+
+    def initialize_logger(self):
+        # setup logging to file and to stdout
+        if(not os.path.exists("logs")):
+            os.makedirs("logs")
+        errorLogFileName = "logs/error_" + datetime.now().strftime("%Y%m%d_%H%M%S") + ".log"
+        self.logger = logging.getLogger('')
+        self.logger.setLevel(logging.INFO)
+        fh = logging.FileHandler(errorLogFileName)
+        sh = logging.StreamHandler(sys.stdout)
+        formatter = logging.Formatter('[%(asctime)s] %(levelname)s %(message)s', datefmt='%H:%M:%S')
+        fh.setFormatter(formatter)
+        sh.setFormatter(formatter)
+        self.logger.addHandler(fh)
+        self.logger.addHandler(sh)
+        return self.logger
+
+if __name__ == '__main__':
+
+    data = {
+        'first_name': ['Jack',  'Jim',   'John', 'Jane',     'Jenny',  'John'],
+        'last_name':  ['Black', 'Brown', 'Doe',  'Martinez', 'Smith', 'Zawichi']
+    }
+    the_data = pd.DataFrame(data)
+
+    # # Add a column to the dataframe with the first letter of the 'Last Name' field
+    # the_data['LastNameFirstLetter'] = the_data['last_name'].str[0]
+
+    max_entries_per_partition = 2
+
+    np = NamePartionioner()
+    # logger=np.initialize_logger()
+
+    np.get_optimum_partition_boundaries(the_data, max_entries_per_partition)
+
 

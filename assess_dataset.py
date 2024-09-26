@@ -51,17 +51,15 @@ def test_dataset_reasonability() -> tuple[int, int]:
     # logging.info the result
     logger.info(
         f'The most common last name is "{most_common_last_name["Last Name"]}" with {most_common_last_name_occurrences} occurrences.')
-
-    return number_of_last_names, most_common_last_name_occurrences
-
-    # # Create bar chart with the distribution of the first letters of the last names
     #
-    # # Add a column to the dataframe with the first letter of the 'Last Name' field
+    # #Create bar chart with the distribution of the first letters of the last names
+    #
+    # #Add a column to the dataframe with the first letter of the 'Last Name' field
     # df['LastNameFirstLetter'] = df['Last Name'].str[0]
     #
     # # Sort the counts by the first letter of the last name
     # first_letter_counts = df['LastNameFirstLetter'].value_counts().sort_index()
-
+    #
     # plt.bar(first_letter_counts.index, first_letter_counts.values, color='skyblue')
     # plt.xlabel('First Letter of Last Name')
     # plt.ylabel('Count')
@@ -73,6 +71,7 @@ def test_dataset_reasonability() -> tuple[int, int]:
     # plt.title('Distribution of First Letters of Last Names')
     # plt.show()
     # Test the reasonability of the dataset
+    return number_of_last_names, most_common_last_name_occurrences
 
 
 # Press the green button in the gutter to run the script.

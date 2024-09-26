@@ -4,20 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5516e9e3-b2c1-4d3c-aa11-6e7c3a81f0ca" name="Changes" comment="Add requirements.txt">
-      <change afterPath="$PROJECT_DIR$/assess_dataset.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/name_partitioner.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/random_names_with_age_diverse_1000.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/recursive_name_partitioner.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test_assess_dataset.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test_name_partioner.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/DivideNamesIntoEvenGroups.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/DivideNamesIntoEvenGroups.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="5516e9e3-b2c1-4d3c-aa11-6e7c3a81f0ca" name="Changes" comment="Added 2 variations of a bucketing system&#10;The first variation is simplest.  It divides the data into 3 partitions and operates with nested for loops.&#10;The second variation support n number of partitions because it uses recursion rather than nested for loops.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example_chart.png" beforeDir="false" afterPath="$PROJECT_DIR$/example_chart.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/random_names_with_age_diverse_100.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assess_dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/assess_dataset.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/name_partitioner.py" beforeDir="false" afterPath="$PROJECT_DIR$/name_partitioner.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_name_partioner.py" beforeDir="false" afterPath="$PROJECT_DIR$/test_name_partioner.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,10 +49,10 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
     "last_opened_file_path": "/Users/johnfunk/Documents/code/DivideListIntoEvenGroupsByName",
-    "settings.editor.selected.configurable": "preferences.keymap"
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   }
 }]]></component>
-  <component name="RunManager" selected="Python.recursive_name_partitioner">
+  <component name="RunManager" selected="Python.name_partitioner">
     <configuration name="assess_dataset" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="DivideNamesIntoEvenGroups" />
       <option name="ENV_FILES" value="" />
@@ -159,9 +151,9 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.recursive_name_partitioner" />
         <item itemvalue="Python.name_partitioner" />
         <item itemvalue="Python tests.Python tests in test_name_partioner.py" />
+        <item itemvalue="Python.recursive_name_partitioner" />
         <item itemvalue="Python tests.Python tests in test_assess_dataset.py" />
       </list>
     </recent_temporary>
@@ -206,7 +198,15 @@
       <option name="project" value="LOCAL" />
       <updated>1726116167779</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Added 2 variations of a bucketing system&#10;The first variation is simplest.  It divides the data into 3 partitions and operates with nested for loops.&#10;The second variation support n number of partitions because it uses recursion rather than nested for loops.">
+      <option name="closed" value="true" />
+      <created>1726459415699</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1726459415699</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -223,25 +223,36 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial Commit&#10;The first commit we'll start by plotting the test data chatGPT generate for us to make sure it's diverse enough. We'll do that by visualizing the distribution of the first letters of the last names using a bar chart." />
     <MESSAGE value="Add requirements.txt" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add requirements.txt" />
+    <MESSAGE value="Added 2 variations of a bucketing system&#10;The first variation is simplest.  It divides the data into 3 partitions and operates with nested for loops.&#10;The second variation support n number of partitions because it uses recursion rather than nested for loops." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added 2 variations of a bucketing system&#10;The first variation is simplest.  It divides the data into 3 partitions and operates with nested for loops.&#10;The second variation support n number of partitions because it uses recursion rather than nested for loops." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/assess_dataset.py</url>
-          <line>68</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/name_partitioner.py</url>
-          <line>63</line>
+          <line>274</line>
           <option name="timeStamp" value="7" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/name_partitioner.py</url>
-          <line>41</line>
-          <option name="timeStamp" value="8" />
+          <line>236</line>
+          <option name="timeStamp" value="21" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/name_partitioner.py</url>
+          <line>103</line>
+          <option name="timeStamp" value="23" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/test_name_partioner.py</url>
+          <line>8</line>
+          <option name="timeStamp" value="27" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/test_name_partioner.py</url>
+          <line>20</line>
+          <option name="timeStamp" value="28" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

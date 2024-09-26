@@ -1,4 +1,4 @@
- ['''''''''# DivideNamesIntoEvenGroups
+ # DivideNamesIntoEvenGroups
 
 This project divides a list of names into even groups based on the first letter of the last name.
 
