@@ -4,11 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5516e9e3-b2c1-4d3c-aa11-6e7c3a81f0ca" name="Changes" comment="Added 2 variations of a bucketing system&#10;The first variation is simplest.  It divides the data into 3 partitions and operates with nested for loops.&#10;The second variation support n number of partitions because it uses recursion rather than nested for loops.">
+    <list default="true" id="5516e9e3-b2c1-4d3c-aa11-6e7c3a81f0ca" name="Changes" comment="Added score based partitioning&#10;The partitioning logic now uses a bucket variance score that represents how evenly distributed the partitions are, and a spread score that represents how wide the partitions are.  It now optimized these two scores to pick the best partitions for the data provided.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assess_dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/assess_dataset.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/name_partitioner.py" beforeDir="false" afterPath="$PROJECT_DIR$/name_partitioner.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/random_names_with_age_diverse_1000.csv" beforeDir="false" afterPath="$PROJECT_DIR$/random_names_with_age_diverse_1000.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test_name_partioner.py" beforeDir="false" afterPath="$PROJECT_DIR$/test_name_partioner.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -38,6 +39,17 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Python tests.Python tests for test_name_partioner.TestNamePartitioner.test_twenty_split_into_three_partitions.executor": "Run",
+    "Python tests.Python tests for test_name_partioner.TestNamePartitioner.test_twenty_split_into_three_partitions_impossibly_low_max_entries_per_partition.executor": "Run",
+    "Python tests.Python tests for test_name_partioner.TestNamePartitioner.test_with_18_to_39_year_olds_in_test_data_file.executor": "Run",
+    "Python tests.Python tests for test_name_partioner.TestNamePartitioner.test_with_45_to_99_year_olds_in_test_data_file.executor": "Run",
+    "Python tests.Python tests for test_name_partioner.TestNamePartitioner.test_with_4_to_6_year_olds_in_test_data_file.executor": "Run",
+    "Python tests.Python tests for test_name_partioner.TestNamePartitioner.test_with_4_to_8_year_olds_in_test_data_file.executor": "Run",
+    "Python tests.Python tests for test_name_partioner.TestNamePartitioner.test_with_7_to_8_year_olds_in_test_data_file.executor": "Run",
+    "Python tests.Python tests for test_name_partioner.TestNamePartitioner.test_with_9_to_11_year_olds_in_test_data_file.executor": "Run",
+    "Python tests.Python tests for test_name_partioner.TestNamePartitioner.test_with_datafile.executor": "Run",
+    "Python tests.Python tests for test_name_partioner.TestNamePartitioner.test_with_entire_test_data_file.executor": "Run",
+    "Python tests.Python tests for test_name_partioner.TestNamePartitioner.test_with_even_number_of_elements.executor": "Run",
     "Python tests.Python tests in main_test.py.executor": "Run",
     "Python tests.Python tests in test_assess_dataset.py.executor": "Run",
     "Python tests.Python tests in test_main.py.executor": "Run",
@@ -52,7 +64,7 @@
     "settings.editor.selected.configurable": "preferences.pluginManager"
   }
 }]]></component>
-  <component name="RunManager" selected="Python.name_partitioner">
+  <component name="RunManager" selected="Python tests.Python tests in test_name_partioner.py">
     <configuration name="assess_dataset" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="DivideNamesIntoEvenGroups" />
       <option name="ENV_FILES" value="" />
@@ -75,51 +87,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="name_partitioner" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="DivideNamesIntoEvenGroups" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/name_partitioner.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="recursive_name_partitioner" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="DivideNamesIntoEvenGroups" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/recursive_name_partitioner.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="Python tests in test_assess_dataset.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests for test_name_partioner.TestNamePartitioner.test_with_18_to_39_year_olds_in_test_data_file" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="DivideNamesIntoEvenGroups" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -130,8 +98,53 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/test_assess_dataset.py&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <option name="_new_target" value="&quot;test_name_partioner.TestNamePartitioner.test_with_18_to_39_year_olds_in_test_data_file&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Python tests for test_name_partioner.TestNamePartitioner.test_with_45_to_99_year_olds_in_test_data_file" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="DivideNamesIntoEvenGroups" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_name_partioner.TestNamePartitioner.test_with_45_to_99_year_olds_in_test_data_file&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Python tests for test_name_partioner.TestNamePartitioner.test_with_4_to_8_year_olds_in_test_data_file" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="DivideNamesIntoEvenGroups" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_name_partioner.TestNamePartitioner.test_with_4_to_8_year_olds_in_test_data_file&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Python tests for test_name_partioner.TestNamePartitioner.test_with_9_to_11_year_olds_in_test_data_file" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="DivideNamesIntoEvenGroups" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_name_partioner.TestNamePartitioner.test_with_9_to_11_year_olds_in_test_data_file&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
     <configuration name="Python tests in test_name_partioner.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
@@ -151,10 +164,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.name_partitioner" />
         <item itemvalue="Python tests.Python tests in test_name_partioner.py" />
-        <item itemvalue="Python.recursive_name_partitioner" />
-        <item itemvalue="Python tests.Python tests in test_assess_dataset.py" />
+        <item itemvalue="Python tests.Python tests for test_name_partioner.TestNamePartitioner.test_with_45_to_99_year_olds_in_test_data_file" />
+        <item itemvalue="Python tests.Python tests for test_name_partioner.TestNamePartitioner.test_with_18_to_39_year_olds_in_test_data_file" />
+        <item itemvalue="Python tests.Python tests for test_name_partioner.TestNamePartitioner.test_with_4_to_8_year_olds_in_test_data_file" />
+        <item itemvalue="Python tests.Python tests for test_name_partioner.TestNamePartitioner.test_with_9_to_11_year_olds_in_test_data_file" />
       </list>
     </recent_temporary>
   </component>
@@ -206,7 +220,23 @@
       <option name="project" value="LOCAL" />
       <updated>1726459415699</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Added score based partitioning&#10;The partitioning logic now uses a bucket variance score that represents how evenly distributed the partitions are, and a spread score that represents how wide the partitions are.  It now optimized these two scores to pick the best partitions for the data provided.">
+      <option name="closed" value="true" />
+      <created>1727320994762</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1727320994762</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Added score based partitioning&#10;The partitioning logic now uses a bucket variance score that represents how evenly distributed the partitions are, and a spread score that represents how wide the partitions are.  It now optimized these two scores to pick the best partitions for the data provided.">
+      <option name="closed" value="true" />
+      <created>1727321290236</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1727321290236</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -224,35 +254,31 @@
     <MESSAGE value="Initial Commit&#10;The first commit we'll start by plotting the test data chatGPT generate for us to make sure it's diverse enough. We'll do that by visualizing the distribution of the first letters of the last names using a bar chart." />
     <MESSAGE value="Add requirements.txt" />
     <MESSAGE value="Added 2 variations of a bucketing system&#10;The first variation is simplest.  It divides the data into 3 partitions and operates with nested for loops.&#10;The second variation support n number of partitions because it uses recursion rather than nested for loops." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added 2 variations of a bucketing system&#10;The first variation is simplest.  It divides the data into 3 partitions and operates with nested for loops.&#10;The second variation support n number of partitions because it uses recursion rather than nested for loops." />
+    <MESSAGE value="Added score based partitioning&#10;The partitioning logic now uses a bucket variance score that represents how evenly distributed the partitions are, and a spread score that represents how wide the partitions are.  It now optimized these two scores to pick the best partitions for the data provided." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added score based partitioning&#10;The partitioning logic now uses a bucket variance score that represents how evenly distributed the partitions are, and a spread score that represents how wide the partitions are.  It now optimized these two scores to pick the best partitions for the data provided." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/name_partitioner.py</url>
-          <line>274</line>
+          <line>285</line>
           <option name="timeStamp" value="7" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/name_partitioner.py</url>
           <line>236</line>
-          <option name="timeStamp" value="21" />
+          <option name="timeStamp" value="30" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/name_partitioner.py</url>
-          <line>103</line>
-          <option name="timeStamp" value="23" />
+          <line>202</line>
+          <option name="timeStamp" value="31" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/test_name_partioner.py</url>
-          <line>8</line>
-          <option name="timeStamp" value="27" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/test_name_partioner.py</url>
-          <line>20</line>
-          <option name="timeStamp" value="28" />
+          <url>file://$PROJECT_DIR$/name_partitioner.py</url>
+          <line>116</line>
+          <option name="timeStamp" value="32" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

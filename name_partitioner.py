@@ -33,11 +33,6 @@ class NamePartionioner:
     def split_into_two_partitions(self, max_entries_per_partition:int, the_data:pd.DataFrame) -> list:
         '''split the data into two partitions'''
         self.logger.info("split_into_two_partitions")
-        self.logger.info(the_data)
-
-        # calculate the number of partitions
-        number_of_partitions = math.ceil((len(the_data) / max_entries_per_partition))
-        self.logger.info(f'number_of_partitions:', number_of_partitions)
 
         i=0
         for boundry1 in range(1, 26):
@@ -72,7 +67,7 @@ class NamePartionioner:
                                                           [chr(64 + boundry1 + 1), 'Z'])})
 
             i = i + 1
-        self.logger.info(f'evaluated {i} combinations')
+        self.logger.info(f'evaluated {i} two partition combinations. {len(self.list_of_scores)} solutions found')
 
     def split_into_three_partitions(self, max_entries_per_partition:int, the_data:pd.DataFrame) -> list:
         self.logger.info("split_into_three_partitions")
@@ -120,7 +115,7 @@ class NamePartionioner:
                                                               [chr(64 + boundry2 + 1), 'Z'])})
 
                 i = i + 1
-        self.logger.info(f'evaluated {i} combinations')
+        self.logger.info(f'evaluated {i} three partition combinations. {len(self.list_of_scores)} solutions found')
 
     def split_into_four_partitions(self, max_entries_per_partition:int, the_data:pd.DataFrame) -> list:
         self.logger.info("split_into_four_partitions")
@@ -176,11 +171,12 @@ class NamePartionioner:
                               f'- bucket_variance_score={bucket_variance_score} spread_score={spread_score}')
                         self.list_of_scores.append({'bucket_variance_score':bucket_variance_score,'spread_score':spread_score, 'boundaries':(['A', chr(64 + boundry1)],
                                                                                                  [chr(64 + boundry1 + 1), chr(64 + boundry2)],
-                                                                                                 [chr(64 + boundry2 + 1), boundry3],
+                                                                                                 [chr(64 + boundry2 + 1), chr(64 + boundry3)],
                                                                                                  [chr(64 + boundry3 + 1),'Z'])})
 
                     i = i + 1
-        self.logger.info(f'evaluated {i} combinations')
+        self.logger.info(f'evaluated {i} four partition combinations. {len(self.list_of_scores)} solutions found')
+
 
     # def get_partition_boundaries(self, the_data:pd.DataFrame, max_entries_per_partition:int) -> list:
     #     self.logger.info(the_data)
@@ -194,9 +190,15 @@ class NamePartionioner:
         size_of_dataframe = len(the_data)
         expected_partitions = math.ceil(size_of_dataframe / max_entries_per_partition)
         self.logger.info(f'data size:{size_of_dataframe}, max people per partition: {max_entries_per_partition}, expected_partitions: {expected_partitions} or {expected_partitions + 1}')
+        if(expected_partitions > 4):
+            self.logger.error(f'Too much data to split into maximum of 4 partitions - data size:{size_of_dataframe}, max people per partition: {max_entries_per_partition}, would require: {expected_partitions} or {expected_partitions + 1} partitions')
+            raise ValueError(f'Too much data to split into the maximum of 4 partitions - data size:{size_of_dataframe}, max people per partition: {max_entries_per_partition}, would require: {expected_partitions} or {expected_partitions + 1} partitions')
+            # return [['A', 'Z']]
 
         # Add a column to the dataframe with the first letter of the 'Last Name' field
         the_data['LastNameFirstLetter'] = the_data['last_name'].str[0]
+        self.logger.info(the_data)
+
 
         match expected_partitions:
             case 1:
@@ -204,16 +206,25 @@ class NamePartionioner:
 
             case 2:
                 self.split_into_two_partitions(max_entries_per_partition, the_data)
-                self.split_into_two_partitions(max_entries_per_partition, the_data)
-                self.split_into_three_partitions(max_entries_per_partition, the_data)
+                if(len(self.list_of_scores) == 0):
+                    self.logger.info("no solutions found for two partitions, trying three")
+                    self.split_into_three_partitions(max_entries_per_partition, the_data)
 
             case 3:
                 self.split_into_three_partitions(max_entries_per_partition, the_data)
-                self.split_into_four_partitions(max_entries_per_partition, the_data)
+                if(len(self.list_of_scores) == 0):
+                    self.logger.info("no solutions found for three partitions, trying four")
+                    self.split_into_four_partitions(max_entries_per_partition, the_data)
+
+        if len(self.list_of_scores) == 0:
+            self.logger.error(f'No solutions found to partition the data into partitions of {max_entries_per_partition} entries')
+            raise ValueError(f'No solutions found to partition the data into partitions of {max_entries_per_partition} entries')
+            # return [['A', 'Z']]
 
         # self.split_into_two_partitions(max_entries_per_partition, the_data)
         # self.split_into_three_partitions(max_entries_per_partition, the_data)
         # self.split_into_four_partitions(max_entries_per_partition, the_data)
+
 
 
         # # Find the index of the element with the lowest bucket_variance_score and highest spread_score
